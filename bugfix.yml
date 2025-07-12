@@ -1,0 +1,11 @@
+to_fix_label: "bug_v01"
+submitted_fix_label: "bug_v01_fix_submitted"
+failed_fix_label: "bug_v01_fix_failed"
+workdir: "python_programs"
+test_cmd: "pytest"
+branch_prefix: "bugfix_v01_"
+main_branch: "main"
+max_issues: 40
+max_attempts: 1
+provider: "google"
+model: "gemini-2.0-flash-lite"
