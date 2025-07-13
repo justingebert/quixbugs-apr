@@ -4,11 +4,15 @@ def kheapsort(arr, k):
     heap = arr[:k]
     heapq.heapify(heap)
 
-    for x in arr:
-        yield heapq.heappushpop(heap, x)
+    result = []
+    for i in range(k, len(arr)):
+        result.append(heapq.heappushpop(heap, arr[i]))
 
     while heap:
-        yield heapq.heappop(heap)
+        result.append(heapq.heappop(heap))
+
+    for item in result:
+        yield item
 
 
 """
