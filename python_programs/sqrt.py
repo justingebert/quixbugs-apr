@@ -1,9 +1,13 @@
-
 def sqrt(x, epsilon):
+    if x < 0:
+        return "Cannot compute square root of a negative number"
+    if x == 0:
+        return 0
     approx = x / 2
-    while abs(x - approx) > epsilon:
+    while abs(approx * approx - x) > epsilon:
         approx = 0.5 * (approx + x / approx)
     return approx
+
 
 """
 Square Root
@@ -16,7 +20,7 @@ Input:
     epsilon: A float
 
 Precondition:
-    x >= 1 and epsilon > 0
+    x >= 0 and epsilon > 0
 
 Output:
     A float in the interval [sqrt(x) - epsilon, sqrt(x) + epsilon]
