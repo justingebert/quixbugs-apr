@@ -1,0 +1,84 @@
+name: Auto Bugfix CI
+on:
+  workflow_dispatch: {}
+  # schedule:
+  #   - cron: "30 3 * * *"
+  issues:
+    types: [ opened, labeled ]
+  issue_comment:
+    types: [ created, edited ]
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      filtered-issues: ${{ steps.filter-issues.outputs.issues }}
+    permissions:
+      issues: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml PyGithub
+
+      - name: Filter issues based on config
+        id: filter-issues
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+        run: python .github/scripts/filter_issues.py
+
+  skipped:
+    needs: gate
+    if: ${{ needs.gate.outputs.filtered-issues == '' || needs.gate.outputs.filtered-issues == '[]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: No issues to process
+        run: echo "No issues to process, workflow skipped"
+
+  bugfix:
+    needs: gate
+    if: ${{ needs.gate.outputs.filtered-issues != '' && needs.gate.outputs.filtered-issues != '[]' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all branches
+
+      - name: Pull latest APR image
+        run: docker pull ghcr.io/justingebert/bugfix-ci:latest
+
+      - name: Run APR
+        env:
+          GITHUB_TOKEN:   ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          FILTERED_ISSUES: ${{ needs.gate.outputs.filtered-issues }}
+        run: |
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/workspace" \
+            -e GITHUB_TOKEN -e GITHUB_RUN_ID -e GITHUB_REPOSITORY -e LLM_API_KEY -e FILTERED_ISSUES \
+            ghcr.io/justingebert/bugfix-ci:latest
+
+      - name: Upload logs and metrics
+        uses: actions/upload-artifact@v4
+        with:
+          name: apr-logs-and-metrics
+          path: |
+            logs/
+            workspace/logs/
