@@ -1,20 +1,20 @@
 def find_first_in_sorted(arr, x):
     lo = 0
-    hi = len(arr)
+    hi = len(arr) - 1  # Initialize hi to the last valid index
+    result = -1  # Variable to store the potential first occurrence
 
     while lo <= hi:
         mid = (lo + hi) // 2
 
-        if x == arr[mid] and (mid == 0 or x != arr[mid - 1]):
-            return mid
+        if arr[mid] == x:
+            result = mid  # Found an occurrence, store it
+            hi = mid - 1  # Try to find an even earlier occurrence in the left part
+        elif arr[mid] < x:
+            lo = mid + 1  # x must be in the right part
+        else:  # arr[mid] > x
+            hi = mid - 1  # x must be in the left part
 
-        elif x <= arr[mid]:
-            hi = mid
-
-        else:
-            lo = mid + 1
-
-    return -1
+    return result
 
 
 """
