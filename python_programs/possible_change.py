@@ -5,9 +5,22 @@ def possible_change(coins, total):
     if total < 0:
         return 0
 
-    first, *rest = coins
-    return possible_change(coins, total - first) + possible_change(rest, total)
+    # Bug fix: Handle the case where the 'coins' list is empty.
+    # If there are no coins left and the total is still positive, it's impossible to make change.
+    if not coins:
+        return 0
 
+    # The original line 'first, *rest = coins' would raise a ValueError if 'coins' is empty.
+    # With the above check, we ensure 'coins' is not empty before proceeding.
+    first = coins[0]
+    rest = coins[1:]
+
+    # Recursive calls:
+    # 1. Use the 'first' coin: Subtract its value from the total and continue
+    #    with the *same* set of coins (allowing multiple uses of the same coin).
+    # 2. Don't use the 'first' coin: Move to the 'rest' of the coins to make
+    #    the original 'total'.
+    return possible_change(coins, total - first) + possible_change(rest, total)
 
 
 """
