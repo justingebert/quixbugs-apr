@@ -4,11 +4,12 @@ def bucketsort(arr, k):
         counts[x] += 1
 
     sorted_arr = []
-    for i, count in enumerate(arr):
-        sorted_arr.extend([i] * count)
+    for i in range(k):  # Iterate through the range of possible values (0 to k-1)
+        sorted_arr.extend(
+            [i] * counts[i]
+        )  # Use the counts array to add the correct number of 'i's
 
     return sorted_arr
-
 
 
 """
