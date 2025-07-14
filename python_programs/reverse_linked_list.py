@@ -1,9 +1,11 @@
 def reverse_linked_list(node):
     prevnode = None
-    while node:
-        nextnode = node.successor
-        node.successor = prevnode
-        node = nextnode
+    currentnode = node
+    while currentnode:
+        nextnode = currentnode.successor
+        currentnode.successor = prevnode
+        prevnode = currentnode
+        currentnode = nextnode
     return prevnode
 
 
