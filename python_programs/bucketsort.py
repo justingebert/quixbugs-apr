@@ -4,11 +4,12 @@ def bucketsort(arr, k):
         counts[x] += 1
 
     sorted_arr = []
-    for i, count in enumerate(arr):
+    for i, count in enumerate(
+        counts
+    ):  # Iterate through the counts array, not the input array
         sorted_arr.extend([i] * count)
 
     return sorted_arr
-
 
 
 """
