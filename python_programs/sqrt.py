@@ -1,9 +1,16 @@
-
 def sqrt(x, epsilon):
     approx = x / 2
-    while abs(x - approx) > epsilon:
+    # The condition for convergence in Newton-Raphson for square root
+    # is when the square of the approximation is close to the original number x.
+    # The original condition `abs(x - approx)` incorrectly checked if x was close to sqrt(x),
+    # rather than if approx was a good approximation of sqrt(x).
+    # The corrected condition `abs(x - approx * approx)` ensures that `approx * approx`
+    # is within `epsilon` distance from `x`, which is the correct convergence criterion
+    # for finding the square root and matches the provided example output.
+    while abs(x - approx * approx) > epsilon:
         approx = 0.5 * (approx + x / approx)
     return approx
+
 
 """
 Square Root
