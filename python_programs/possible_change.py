@@ -2,12 +2,14 @@
 def possible_change(coins, total):
     if total == 0:
         return 1
-    if total < 0:
+    if total < 0 or not coins:
         return 0
 
     first, *rest = coins
+    # Two possibilities:
+    # 1. We use the 'first' coin. In this case, we reduce the total by 'first' and recursively call with the same set of coins.
+    # 2. We don't use the 'first' coin. In this case, we recursively call with the remaining coins ('rest') and the same total.
     return possible_change(coins, total - first) + possible_change(rest, total)
-
 
 
 """
