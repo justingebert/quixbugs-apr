@@ -2,7 +2,7 @@ def gcd(a, b):
     if b == 0:
         return a
     else:
-        return gcd(a % b, b)
+        return gcd(b, a % b)
 
 
 """
@@ -14,7 +14,7 @@ Input:
 Greatest Common Divisor
 
 Precondition:
-    isinstance(a, int) and isinstance(b, int)
+    isinstance(a, int) and isinstance(b, int) and a >= 0 and b >= 0
 
 Output:
     The greatest int that divides evenly into a and b
