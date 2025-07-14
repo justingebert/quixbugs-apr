@@ -1,12 +1,23 @@
 def kheapsort(arr, k):
     import heapq
 
-    heap = arr[:k]
+    # Initialize heap with the first k+1 elements (or fewer if arr is shorter)
+    # These are the first elements that could potentially be in the sorted array's first positions.
+    initial_elements_count = min(len(arr), k + 1)
+    heap = arr[:initial_elements_count]
     heapq.heapify(heap)
 
-    for x in arr:
-        yield heapq.heappushpop(heap, x)
+    # Iterate through the rest of the array.
+    # For each element, we extract the smallest from the heap and then add the new element.
+    # The smallest element from the current window (heap) is guaranteed to be the next sorted element.
+    for i in range(k + 1, len(arr)):
+        # Yield the smallest element from the heap
+        yield heapq.heappop(heap)
+        # Add the next element from the array into the heap
+        heapq.heappush(heap, arr[i])
 
+    # After iterating through all elements in arr, yield any remaining elements in the heap.
+    # These are the largest elements that were still in the 'k' window.
     while heap:
         yield heapq.heappop(heap)
 
