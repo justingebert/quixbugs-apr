@@ -1,19 +1,50 @@
-
 def minimum_spanning_tree(weight_by_edge):
-    group_by_node = {}
+    parent = {}
+
+    # Collect all unique nodes
+    nodes = set()
+    for u, v in weight_by_edge:
+        nodes.add(u)
+        nodes.add(v)
+
+    # Initialize each node to be its own parent
+    for node in nodes:
+        parent[node] = node
+
+    # Find operation with path compression
+    def find(i):
+        if parent[i] == i:
+            return i
+        parent[i] = find(parent[i])  # Path compression
+        return parent[i]
+
+    # Union operation
+    def union(i, j):
+        root_i = find(i)
+        root_j = find(j)
+
+        if root_i != root_j:
+            parent[root_j] = root_i  # Attach root_j's tree to root_i's tree
+            return True  # Successfully merged
+        return False  # Already in the same set
+
     mst_edges = set()
 
-    for edge in sorted(weight_by_edge, key=weight_by_edge.__getitem__):
-        u, v = edge
-        if group_by_node.setdefault(u, {u}) != group_by_node.setdefault(v, {v}):
-            mst_edges.add(edge)
-            group_by_node[u].update(group_by_node[v])
-            for node in group_by_node[v]:
-                group_by_node[node].update(group_by_node[u])
+    # Sort edges by weight
+    sorted_edges = sorted(weight_by_edge.items(), key=lambda item: item[1])
+
+    num_vertices = len(nodes)
+    edges_added_count = 0
+
+    for (u, v), weight in sorted_edges:
+        if union(u, v):
+            mst_edges.add((u, v))
+            edges_added_count += 1
+            # Optimization: If we have added V-1 edges, we have found the MST
+            if edges_added_count == num_vertices - 1:
+                break
 
     return mst_edges
-
-
 
 
 """
