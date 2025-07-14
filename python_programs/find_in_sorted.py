@@ -1,18 +1,18 @@
 def find_in_sorted(arr, x):
     def binsearch(start, end):
-        if start == end:
+        if start >= end:  # Changed condition from start == end to start >= end
             return -1
         mid = start + (end - start) // 2
         if x < arr[mid]:
             return binsearch(start, mid)
         elif x > arr[mid]:
-            return binsearch(mid, end)
+            return binsearch(
+                mid + 1, end
+            )  # Changed end to mid + 1 in the recursive call
         else:
             return mid
 
     return binsearch(0, len(arr))
-
-
 
 
 """
