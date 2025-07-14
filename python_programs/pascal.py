@@ -1,10 +1,16 @@
-
 def pascal(n):
     rows = [[1]]
     for r in range(1, n):
         row = []
-        for c in range(0, r):
+        # The inner loop should iterate r+1 times to generate r+1 elements for the current row (0-indexed r).
+        # The previous row (rows[r-1]) has r elements.
+        for c in range(0, r + 1):
+            # Calculate the upleft element from the previous row
+            # If c is 0, there is no upleft element, so it's 0.
             upleft = rows[r - 1][c - 1] if c > 0 else 0
+            # Calculate the upright element from the previous row
+            # If c is equal to or greater than the number of elements in the previous row (which is r),
+            # there is no upright element, so it's 0.
             upright = rows[r - 1][c] if c < r else 0
             row.append(upleft + upright)
         rows.append(row)
