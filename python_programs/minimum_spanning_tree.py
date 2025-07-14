@@ -1,19 +1,41 @@
-
 def minimum_spanning_tree(weight_by_edge):
     group_by_node = {}
     mst_edges = set()
 
     for edge in sorted(weight_by_edge, key=weight_by_edge.__getitem__):
         u, v = edge
-        if group_by_node.setdefault(u, {u}) != group_by_node.setdefault(v, {v}):
+        root_u = None
+        root_v = None
+
+        # Find the root of the set containing u
+        for node in group_by_node:
+            if u in group_by_node[node]:
+                root_u = node
+                break
+        if root_u is None:
+            group_by_node[u] = {u}
+            root_u = u
+
+        # Find the root of the set containing v
+        for node in group_by_node:
+            if v in group_by_node[node]:
+                root_v = node
+                break
+        if root_v is None:
+            group_by_node[v] = {v}
+            root_v = v
+
+        if root_u != root_v:
             mst_edges.add(edge)
-            group_by_node[u].update(group_by_node[v])
-            for node in group_by_node[v]:
-                group_by_node[node].update(group_by_node[u])
+            # Union the two sets
+            group_by_node[root_u].update(group_by_node[root_v])
+            # Update all nodes in the merged set to point to the new root
+            for node in group_by_node[root_v]:
+                group_by_node[node] = group_by_node[root_u]
+            # Remove the old root's set to avoid redundancy
+            del group_by_node[root_v]
 
     return mst_edges
-
-
 
 
 """
