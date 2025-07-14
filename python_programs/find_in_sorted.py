@@ -6,13 +6,13 @@ def find_in_sorted(arr, x):
         if x < arr[mid]:
             return binsearch(start, mid)
         elif x > arr[mid]:
-            return binsearch(mid, end)
+            # Bug fix: When x is greater, the search space should exclude mid
+            # and start from mid + 1 to avoid infinite loops
+            return binsearch(mid + 1, end)
         else:
             return mid
 
     return binsearch(0, len(arr))
-
-
 
 
 """
