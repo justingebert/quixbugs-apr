@@ -1,18 +1,21 @@
 def kth(arr, k):
-    pivot = arr[0]
+    if not arr:
+        return None
+
+    pivot = arr[len(arr) // 2]
     below = [x for x in arr if x < pivot]
+    equal = [x for x in arr if x == pivot]
     above = [x for x in arr if x > pivot]
 
-    num_less = len(below)
-    num_lessoreq = len(arr) - len(above)
+    num_below = len(below)
+    num_equal = len(equal)
 
-    if k < num_less:
+    if k < num_below:
         return kth(below, k)
-    elif k >= num_lessoreq:
-        return kth(above, k)
-    else:
+    elif k < num_below + num_equal:
         return pivot
-
+    else:
+        return kth(above, k - num_below - num_equal)
 
 
 """
