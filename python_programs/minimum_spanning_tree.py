@@ -1,42 +1,27 @@
-
 def minimum_spanning_tree(weight_by_edge):
     group_by_node = {}
     mst_edges = set()
 
     for edge in sorted(weight_by_edge, key=weight_by_edge.__getitem__):
         u, v = edge
-        if group_by_node.setdefault(u, {u}) != group_by_node.setdefault(v, {v}):
+        # Initialize groups if not present
+        if u not in group_by_node:
+            group_by_node[u] = {u}
+        if v not in group_by_node:
+            group_by_node[v] = {v}
+
+        # If nodes are in different groups, add edge and merge groups
+        if group_by_node[u] is not group_by_node[v]:
             mst_edges.add(edge)
-            group_by_node[u].update(group_by_node[v])
-            for node in group_by_node[v]:
-                group_by_node[node].update(group_by_node[u])
+            # Merge the two sets
+            group_u = group_by_node[u]
+            group_v = group_by_node[v]
+            # Merge group_v into group_u
+            for node in group_v:
+                group_node = group_by_node[node]
+                # Update all references to point to the merged set
+                for n in group_node:
+                    group_by_node[n] = group_u
+                group_u.update(group_node)
 
     return mst_edges
-
-
-
-
-"""
-Minimum Spanning Tree
-
-
-Kruskal's algorithm implementation.
-
-Input:
-    weight_by_edge: A dict of the form {(u, v): weight} for every undirected graph edge {u, v}
-
-Precondition:
-    The input graph is connected
-
-Output:
-    A set of edges that connects all the vertices of the input graph and has the least possible total weight.
-
-Example:
-    >>> minimum_spanning_tree({
-    ...     (1, 2): 10,
-    ...     (2, 3): 15,
-    ...     (3, 4): 10,
-    ...     (1, 4): 10
-    ... })
-    {(1, 2), (3, 4), (1, 4)}
-"""
