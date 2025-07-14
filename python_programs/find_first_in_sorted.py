@@ -1,20 +1,22 @@
 def find_first_in_sorted(arr, x):
     lo = 0
-    hi = len(arr)
+    hi = len(arr) - 1
+    ans = -1
 
     while lo <= hi:
         mid = (lo + hi) // 2
 
-        if x == arr[mid] and (mid == 0 or x != arr[mid - 1]):
-            return mid
+        if x == arr[mid]:
+            ans = mid
+            hi = mid - 1
 
-        elif x <= arr[mid]:
-            hi = mid
+        elif x < arr[mid]:
+            hi = mid - 1
 
         else:
             lo = mid + 1
 
-    return -1
+    return ans
 
 
 """
