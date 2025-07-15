@@ -1,16 +1,20 @@
 from collections import defaultdict
 
+
 def shortest_path_lengths(n, length_by_edge):
-    length_by_path = defaultdict(lambda: float('inf'))
+    length_by_path = defaultdict(lambda: float("inf"))
     length_by_path.update({(i, i): 0 for i in range(n)})
     length_by_path.update(length_by_edge)
 
     for k in range(n):
         for i in range(n):
             for j in range(n):
+                # The core update step of Floyd-Warshall algorithm:
+                # The shortest path from i to j using intermediate nodes up to k
+                # is the minimum of the current path and the path that goes
+                # from i to k and then from k to j.
                 length_by_path[i, j] = min(
-                    length_by_path[i, j],
-                    length_by_path[i, k] + length_by_path[j, k]
+                    length_by_path[i, j], length_by_path[i, k] + length_by_path[k, j]
                 )
 
     return length_by_path
