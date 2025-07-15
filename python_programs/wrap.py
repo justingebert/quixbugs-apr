@@ -1,13 +1,33 @@
 def wrap(text, cols):
     lines = []
     while len(text) > cols:
-        end = text.rfind(' ', 0, cols + 1)
-        if end == -1:
+        # Try to find a breaking space within the cols limit.
+        # The search range `0, cols + 1` means indices `0` through `cols`.
+        space_idx = text.rfind(" ", 0, cols + 1)
+
+        # Determine the `end` point for the current line.
+        # Case 1: No space found in text[0...cols] OR the only space found is at text[0].
+        # In both these scenarios, we must take the first `cols` characters.
+        # This will either break a long word, or include a leading space and break a word.
+        # This also prevents an infinite loop if `space_idx` is 0 (as `text[:0]` and `text[0:]` would cause no change to `text`).
+        if space_idx == -1 or space_idx == 0:
             end = cols
+        # Case 2: A suitable breaking space was found at `space_idx` (> 0).
+        # We break at this space to avoid splitting a word unnecessarily.
+        else:
+            end = space_idx
+
+        # Extract the line and update the remaining text.
         line, text = text[:end], text[end:]
         lines.append(line)
 
+    # After the loop, if any text remains (i.e., its length is <= cols),
+    # append it as the last line.
+    if text:
+        lines.append(text)
+
     return lines
+
 
 """
 Wrap Text
