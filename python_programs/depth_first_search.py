@@ -2,17 +2,24 @@ def depth_first_search(startnode, goalnode):
     nodesvisited = set()
 
     def search_from(node):
-        if node in nodesvisited:
-            return False
-        elif node is goalnode:
+        # Mark the current node as visited
+        nodesvisited.add(node)
+
+        # If the current node is the goal node, we found it
+        if node is goalnode:
             return True
-        else:
-            return any(
-                search_from(nextnode) for nextnode in node.successors
-            )
+
+        # Explore neighbors
+        for nextnode in node.successors:
+            # Only recurse if the neighbor has not been visited yet
+            if nextnode not in nodesvisited:
+                if search_from(nextnode):
+                    return True  # Goal found through this path
+
+        # If no path from this node leads to the goal
+        return False
 
     return search_from(startnode)
-
 
 
 """
