@@ -1,15 +1,14 @@
-
 def is_valid_parenthesization(parens):
     depth = 0
     for paren in parens:
-        if paren == '(':
+        if paren == "(":
             depth += 1
         else:
             depth -= 1
             if depth < 0:
                 return False
 
-    return True
+    return depth == 0  # Ensure all open parentheses are closed
 
 
 """
