@@ -4,10 +4,19 @@ def possible_change(coins, total):
         return 1
     if total < 0:
         return 0
+    if not coins:  # If no coins are left and total is still > 0, no way to make change
+        return 0
 
-    first, *rest = coins
-    return possible_change(coins, total - first) + possible_change(rest, total)
+    first_coin = coins[0]
+    rest_of_coins = coins[1:]
 
+    # Option 1: Use the first_coin (allow using it multiple times)
+    ways_with_first = possible_change(coins, total - first_coin)
+
+    # Option 2: Don't use the first_coin (move to the next coin denomination)
+    ways_without_first = possible_change(rest_of_coins, total)
+
+    return ways_with_first + ways_without_first
 
 
 """
