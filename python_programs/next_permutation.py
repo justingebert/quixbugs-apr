@@ -1,14 +1,17 @@
-
 def next_permutation(perm):
     for i in range(len(perm) - 2, -1, -1):
         if perm[i] < perm[i + 1]:
             for j in range(len(perm) - 1, i, -1):
-                if perm[j] < perm[i]:
+                # Bug fix: The condition for finding 'j' was incorrect.
+                # It should find the largest element perm[j] to the right of 'i' that is greater than perm[i].
+                if perm[j] > perm[i]:
                     next_perm = list(perm)
-                    next_perm[i], next_perm[j] = perm[j], perm[i]
-                    next_perm[i + 1:] = reversed(next_perm[i + 1:])
+                    # Bug fix: Swapping should modify 'next_perm', not 'perm'.
+                    next_perm[i], next_perm[j] = next_perm[j], next_perm[i]
+                    # Bug fix: Slicing assignment with reversed() returns an iterator.
+                    # It should be converted to a list or use slice[::-1] for in-place reversal of the slice.
+                    next_perm[i + 1 :] = next_perm[i + 1 :][::-1]
                     return next_perm
-
 
 
 """
