@@ -1,13 +1,14 @@
-
 def pascal(n):
+    if n == 0:
+        return []
     rows = [[1]]
-    for r in range(1, n):
-        row = []
-        for c in range(0, r):
-            upleft = rows[r - 1][c - 1] if c > 0 else 0
-            upright = rows[r - 1][c] if c < r else 0
-            row.append(upleft + upright)
-        rows.append(row)
+    for r_idx in range(1, n):
+        prev_row = rows[r_idx - 1]
+        current_row = [1]
+        for c_idx in range(1, r_idx):
+            current_row.append(prev_row[c_idx - 1] + prev_row[c_idx])
+        current_row.append(1)
+        rows.append(current_row)
 
     return rows
 
