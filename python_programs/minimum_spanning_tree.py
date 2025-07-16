@@ -1,19 +1,46 @@
-
 def minimum_spanning_tree(weight_by_edge):
-    group_by_node = {}
+    parent = {}
+    rank = {}
     mst_edges = set()
 
-    for edge in sorted(weight_by_edge, key=weight_by_edge.__getitem__):
+    def find(i):
+        if parent[i] == i:
+            return i
+        parent[i] = find(parent[i])
+        return parent[i]
+
+    def union(i, j):
+        root_i = find(i)
+        root_j = find(j)
+        if rank[root_i] < rank[root_j]:
+            parent[root_i] = root_j
+        elif rank[root_i] > rank[root_j]:
+            parent[root_j] = root_i
+        else:
+            parent[root_j] = root_i
+            rank[root_i] += 1
+
+    # Initialize disjoint sets for each node
+    nodes = set()
+    for u, v in weight_by_edge:
+        nodes.add(u)
+        nodes.add(v)
+
+    for node in nodes:
+        parent[node] = node
+        rank[node] = 0
+
+    # Sort edges by weight
+    sorted_edges = sorted(weight_by_edge, key=weight_by_edge.__getitem__)
+
+    # Kruskal's algorithm
+    for edge in sorted_edges:
         u, v = edge
-        if group_by_node.setdefault(u, {u}) != group_by_node.setdefault(v, {v}):
+        if find(u) != find(v):
             mst_edges.add(edge)
-            group_by_node[u].update(group_by_node[v])
-            for node in group_by_node[v]:
-                group_by_node[node].update(group_by_node[u])
+            union(u, v)
 
     return mst_edges
-
-
 
 
 """
