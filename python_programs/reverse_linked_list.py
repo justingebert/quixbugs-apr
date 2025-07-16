@@ -3,6 +3,7 @@ def reverse_linked_list(node):
     while node:
         nextnode = node.successor
         node.successor = prevnode
+        prevnode = node  # BUGFIX: add this line to update prevnode!
         node = nextnode
     return prevnode
 
