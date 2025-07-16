@@ -1,26 +1,29 @@
-
 def lis(arr):
     ends = {}
     longest = 0
 
     for i, val in enumerate(arr):
+        # find the length of the longest subsequence ending with a value < val
+        if longest > 0:
+            prefix_lengths = [j for j in range(1, longest + 1) if arr[ends[j]] < val]
+            length = max(prefix_lengths) if prefix_lengths else 0
+        else:
+            length = 0
 
-        prefix_lengths = [j for j in range(1, longest + 1) if arr[ends[j]] < val]
-
-        length = max(prefix_lengths) if prefix_lengths else 0
-
-        if length == longest or val < arr[ends[length + 1]]:
-            ends[length + 1] = i
-            longest = length + 1
+        new_length = length + 1
+        # update the end index for subsequences of length new_length
+        if new_length not in ends or val < arr[ends[new_length]]:
+            ends[new_length] = i
+        # update overall longest if we extended the maximum length
+        if new_length > longest:
+            longest = new_length
 
     return longest
-
 
 
 """
 Longest Increasing Subsequence
 longest-increasing-subsequence
-
 
 Input:
     arr: A sequence of ints
