@@ -1,13 +1,18 @@
 # Python 3
 def possible_change(coins, total):
+    # Base case: exact change made
     if total == 0:
         return 1
-    if total < 0:
+    # No way to make change if total is negative or no coins left
+    if total < 0 or not coins:
         return 0
 
     first, *rest = coins
-    return possible_change(coins, total - first) + possible_change(rest, total)
-
+    # Count ways including the first coin
+    ways_including = possible_change(coins, total - first)
+    # Count ways excluding the first coin
+    ways_excluding = possible_change(rest, total)
+    return ways_including + ways_excluding
 
 
 """
