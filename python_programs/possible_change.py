@@ -2,12 +2,15 @@
 def possible_change(coins, total):
     if total == 0:
         return 1
-    if total < 0:
+    if total < 0 or not coins:
         return 0
 
     first, *rest = coins
-    return possible_change(coins, total - first) + possible_change(rest, total)
-
+    # Use first coin: keep coins as is, reduce total by first
+    use_first = possible_change(coins, total - first)
+    # Skip first coin: use rest coins, total unchanged
+    skip_first = possible_change(rest, total)
+    return use_first + skip_first
 
 
 """
