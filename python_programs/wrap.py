@@ -1,28 +1,34 @@
 def wrap(text, cols):
     lines = []
-    while len(text) > cols:
-        end = text.rfind(' ', 0, cols + 1)
-        if end == -1:
-            end = cols
-        line, text = text[:end], text[end:]
+    while text:  # Loop as long as there's text remaining
+        if len(text) <= cols:  # If remaining text fits, it's the last line
+            lines.append(text)
+            break
+
+        # Attempt to find the last space within the first 'cols' characters.
+        # text.rfind(' ', 0, cols + 1) searches up to and including text[cols].
+        # If a space is found at index 'end', then text[:end] is the potential line segment.
+        end = text.rfind(" ", 0, cols + 1)
+
+        # Handle cases where a word must be broken or text starts with a problematic space
+        if end == -1 or end == 0:
+            # Case 1: No space found within the first 'cols' characters (end == -1).
+            # This means a word is longer than 'cols' or there are no spaces.
+            # We must break the word at 'cols'.
+            # Case 2: The only space found is at the very beginning of the string (end == 0).
+            # This indicates the string looks like " longword" where "longword" is too long
+            # to fit entirely on the line. If we split at 'end=0', line would be "",
+            # leading to an infinite loop or empty lines.
+            # In both these cases, we force a break at 'cols'.
+            line = text[:cols]
+            text = text[cols:]
+        else:
+            # A suitable space was found at 'end' (where end > 0).
+            # This means 'text[:end]' forms a line segment that is at most 'cols' long
+            # and ends just before a space.
+            line = text[:end]
+            text = text[end:]
+
         lines.append(line)
 
     return lines
-
-"""
-Wrap Text
-
-Given a long string and a column width, break the string on spaces into a list of lines such that each line is no longer than the column width.
-
-Input:
-    text: The starting text.
-    cols: The target column width, i.e. the maximum length of any single line after wrapping.
-
-Precondition:
-    cols > 0.
-
-Output:
-    An ordered list of strings, each no longer than the column width, such that the concatenation of the strings returns the original text,
-and such that no word in the original text is broken into two parts unless necessary.  The original amount of spaces are preserved (e.g. spaces
-at the start or end of each line aren't trimmed.),Wrapping Text
-"""
