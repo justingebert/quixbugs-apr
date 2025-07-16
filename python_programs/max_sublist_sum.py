@@ -1,10 +1,14 @@
-
 def max_sublist_sum(arr):
     max_ending_here = 0
     max_so_far = 0
 
     for x in arr:
         max_ending_here = max_ending_here + x
+        # If max_ending_here becomes negative, it means the current subarray sum
+        # is detrimental. Reset it to 0 to start a new subarray from the next element,
+        # as an empty subarray (sum 0) is always an option.
+        if max_ending_here < 0:
+            max_ending_here = 0
         max_so_far = max(max_so_far, max_ending_here)
 
     return max_so_far
