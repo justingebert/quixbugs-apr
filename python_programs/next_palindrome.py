@@ -12,7 +12,15 @@ def next_palindrome(digit_list):
             if low_mid != high_mid:
                 digit_list[low_mid] += 1
             return digit_list
-    return [1] + (len(digit_list)) * [0] + [1]
+    # If the loop completes, it means all digits from the center outwards were 9s (e.g., [9], [9,9], [9,9,9]).
+    # In this case, the number of digits increases, and the result is 1 followed by (n-1) zeros, then 1.
+    # For example, [9] -> [1,1] (length 2)
+    # [9,9] -> [1,0,1] (length 3)
+    # [9,9,9] -> [1,0,0,1] (length 4)
+    # The formula for this is [1] + (len(digit_list) - 1) * [0] + [1]
+    # The original code `(len(digit_list)) * [0]` was off by one for the number of zeros.
+    return [1] + (len(digit_list) - 1) * [0] + [1]
+
 
 """
 Finds the next palindromic integer when given the current integer
