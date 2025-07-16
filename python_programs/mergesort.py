@@ -1,4 +1,3 @@
-
 def mergesort(arr):
     def merge(left, right):
         result = []
@@ -11,17 +10,20 @@ def mergesort(arr):
             else:
                 result.append(right[j])
                 j += 1
-        result.extend(left[i:] or right[j:])
+        # The bug is here: result.extend(left[i:] or right[j:])
+        # If left[i:] is empty, 'or' will give right[j:], but both may not be empty at the same time
+        # But we need to add both (the remainder of left and right), not just one.
+        result.extend(left[i:])
+        result.extend(right[j:])
         return result
 
-    if len(arr) == 0:
+    if len(arr) <= 1:
         return arr
     else:
         middle = len(arr) // 2
         left = mergesort(arr[:middle])
         right = mergesort(arr[middle:])
         return merge(left, right)
-
 
 
 """
