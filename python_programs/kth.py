@@ -4,15 +4,14 @@ def kth(arr, k):
     above = [x for x in arr if x > pivot]
 
     num_less = len(below)
-    num_lessoreq = len(arr) - len(above)
+    num_eq = arr.count(pivot)
 
     if k < num_less:
         return kth(below, k)
-    elif k >= num_lessoreq:
-        return kth(above, k)
+    elif k >= num_less + num_eq:
+        return kth(above, k - num_less - num_eq)
     else:
         return pivot
-
 
 
 """
