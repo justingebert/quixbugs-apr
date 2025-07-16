@@ -1,18 +1,23 @@
 def depth_first_search(startnode, goalnode):
     nodesvisited = set()
+    path = []
 
     def search_from(node):
         if node in nodesvisited:
             return False
-        elif node is goalnode:
+
+        nodesvisited.add(node)
+        path.append(node)
+
+        if node is goalnode:
             return True
         else:
-            return any(
-                search_from(nextnode) for nextnode in node.successors
-            )
+            found = any(search_from(nextnode) for nextnode in node.successors)
+            if not found:
+                path.pop()  # Backtrack if the goal is not found from this path
+            return found
 
     return search_from(startnode)
-
 
 
 """
