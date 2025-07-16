@@ -1,16 +1,24 @@
-
 def shortest_paths(source, weight_by_edge):
-    weight_by_node = {
-        v: float('inf') for u, v in weight_by_edge
-    }
+    all_nodes = set()
+    for u, v in weight_by_edge:
+        all_nodes.add(u)
+        all_nodes.add(v)
+    # Ensure the source node is included even if it's isolated or not an endpoint of any given edge
+    if source not in all_nodes:
+        all_nodes.add(source)
+
+    weight_by_node = {node: float("inf") for node in all_nodes}
     weight_by_node[source] = 0
 
-    for i in range(len(weight_by_node) - 1):
+    num_nodes = len(all_nodes)
+
+    # Perform V-1 iterations
+    for _ in range(num_nodes - 1):
         for (u, v), weight in weight_by_edge.items():
-            weight_by_edge[u, v] = min(
-                weight_by_node[u] + weight,
-                weight_by_node[v]
-            )
+            # Relax the edge (u, v)
+            # Only relax if u is reachable (its current weight is not infinity)
+            if weight_by_node[u] != float("inf"):
+                weight_by_node[v] = min(weight_by_node[v], weight_by_node[u] + weight)
 
     return weight_by_node
 
