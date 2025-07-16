@@ -2,18 +2,18 @@
 def possible_change(coins, total):
     if total == 0:
         return 1
-    if total < 0:
+    # if there are no coins left or total is negative, no way to make change
+    if total < 0 or not coins:
         return 0
 
     first, *rest = coins
+    # count ways including the first coin, and ways excluding it
     return possible_change(coins, total - first) + possible_change(rest, total)
-
 
 
 """
 Making Change
 change
-
 
 Input:
     coins: A list of positive ints representing coin denominations
