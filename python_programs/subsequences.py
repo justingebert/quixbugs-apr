@@ -1,12 +1,10 @@
 def subsequences(a, b, k):
     if k == 0:
-        return []
+        return [[]]
 
     ret = []
     for i in range(a, b + 1 - k):
-        ret.extend(
-            [i] + rest for rest in subsequences(i + 1, b, k - 1)
-        )
+        ret.extend([i] + rest for rest in subsequences(i + 1, b, k - 1))
 
     return ret
 
@@ -25,7 +23,5 @@ Output:
 
 Example:
     >>> subsequences(a=1, b=5, k=3)
-    [[1, 2, 3], [1, 2, 4], [1, 3, 4], [2, 3, 4]]
+    [[1, 2, 3], [1, 2, 4], [1, 2, 5], [1, 3, 4], [1, 3, 5], [1, 4, 5], [2, 3, 4], [2, 3, 5], [2, 4, 5], [3, 4, 5]]
 """
-
-
