@@ -1,5 +1,5 @@
-
 from collections import deque as Queue
+
 
 def breadth_first_search(startnode, goalnode):
     queue = Queue()
@@ -8,17 +8,18 @@ def breadth_first_search(startnode, goalnode):
     nodesseen = set()
     nodesseen.add(startnode)
 
-    while True:
+    while queue:  # Fix: only loop if there are items in the queue
         node = queue.popleft()
 
         if node is goalnode:
             return True
         else:
-            queue.extend(node for node in node.successors if node not in nodesseen)
-            nodesseen.update(node.successors)
+            for succ in node.successors:
+                if succ not in nodesseen:
+                    queue.append(succ)
+                    nodesseen.add(succ)
 
     return False
-
 
 
 """
