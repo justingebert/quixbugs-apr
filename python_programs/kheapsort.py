@@ -1,11 +1,18 @@
 def kheapsort(arr, k):
     import heapq
 
-    heap = arr[:k]
+    n = len(arr)
+    if k == 0:
+        # If k==0, array is already sorted (or must be yielded in current order).
+        for x in arr:
+            yield x
+        return
+
+    heap = arr[: k + 1]  # heap size should be (k+1)
     heapq.heapify(heap)
 
-    for x in arr:
-        yield heapq.heappushpop(heap, x)
+    for i in range(k + 1, n):
+        yield heapq.heappushpop(heap, arr[i])
 
     while heap:
         yield heapq.heappop(heap)
