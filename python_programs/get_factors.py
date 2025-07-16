@@ -1,13 +1,17 @@
-
 def get_factors(n):
+    factors = []
     if n == 1:
-        return []
+        return factors
 
-    for i in range(2, int(n ** 0.5) + 1):
-        if n % i == 0:
-            return [i] + get_factors(n // i)
-
-    return []
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            factors.append(d)
+            n //= d
+        d += 1
+    if n > 1:
+        factors.append(n)
+    return factors
 
 
 """
