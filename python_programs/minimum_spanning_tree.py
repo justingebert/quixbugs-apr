@@ -1,24 +1,24 @@
-
 def minimum_spanning_tree(weight_by_edge):
     group_by_node = {}
     mst_edges = set()
 
     for edge in sorted(weight_by_edge, key=weight_by_edge.__getitem__):
         u, v = edge
-        if group_by_node.setdefault(u, {u}) != group_by_node.setdefault(v, {v}):
+        # Use setdefault to initialize if not present
+        set_u = group_by_node.setdefault(u, {u})
+        set_v = group_by_node.setdefault(v, {v})
+        if set_u is not set_v:
             mst_edges.add(edge)
-            group_by_node[u].update(group_by_node[v])
-            for node in group_by_node[v]:
-                group_by_node[node].update(group_by_node[u])
+            # Union the two sets
+            union_set = set_u.union(set_v)
+            for node in union_set:
+                group_by_node[node] = union_set
 
     return mst_edges
 
 
-
-
 """
 Minimum Spanning Tree
-
 
 Kruskal's algorithm implementation.
 
