@@ -1,37 +1,32 @@
-
 def lis(arr):
-    ends = {}
-    longest = 0
+    """
+    Longest Increasing Subsequence
+    longest-increasing-subsequence
 
-    for i, val in enumerate(arr):
+    Input:
+        arr: A sequence of ints
 
-        prefix_lengths = [j for j in range(1, longest + 1) if arr[ends[j]] < val]
+    Precondition:
+        The ints in arr are unique
 
-        length = max(prefix_lengths) if prefix_lengths else 0
+    Output:
+        The length of the longest monotonically increasing subsequence of arr
 
-        if length == longest or val < arr[ends[length + 1]]:
-            ends[length + 1] = i
-            longest = length + 1
-
-    return longest
-
-
-
-"""
-Longest Increasing Subsequence
-longest-increasing-subsequence
-
-
-Input:
-    arr: A sequence of ints
-
-Precondition:
-    The ints in arr are unique
-
-Output:
-    The length of the longest monotonically increasing subsequence of arr
-
-Example:
-    >>> lis([4, 1, 5, 3, 7, 6, 2])
-    3
-"""
+    Example:
+        >>> lis([4, 1, 5, 3, 7, 6, 2])
+        3
+    """
+    tails = []
+    for num in arr:
+        if not tails or num > tails[-1]:
+            tails.append(num)
+        else:
+            l, r = 0, len(tails) - 1
+            while l <= r:
+                mid = (l + r) // 2
+                if tails[mid] < num:
+                    l = mid + 1
+                else:
+                    r = mid - 1
+            tails[l] = num
+    return len(tails)
