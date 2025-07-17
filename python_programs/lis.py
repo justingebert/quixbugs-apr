@@ -1,4 +1,3 @@
-
 def lis(arr):
     ends = {}
     longest = 0
@@ -9,12 +8,13 @@ def lis(arr):
 
         length = max(prefix_lengths) if prefix_lengths else 0
 
-        if length == longest or val < arr[ends[length + 1]]:
+        # Correct the logic of updating ends dictionary:
+        # Only update ends[length + 1] if it doesn't exist or val is smaller than the current value at ends[length + 1]
+        if length == longest or length + 1 not in ends or val < arr[ends[length + 1]]:
             ends[length + 1] = i
-            longest = length + 1
+            longest = max(longest, length + 1)
 
     return longest
-
 
 
 """
