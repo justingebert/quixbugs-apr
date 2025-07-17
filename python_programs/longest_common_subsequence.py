@@ -1,17 +1,24 @@
 def longest_common_subsequence(a, b):
     if not a or not b:
-        return ''
+        return ""
 
-    elif a[0] == b[0]:
-        return a[0] + longest_common_subsequence(a[1:], b)
+    memo = {}
 
-    else:
-        return max(
-            longest_common_subsequence(a, b[1:]),
-            longest_common_subsequence(a[1:], b),
-            key=len
-        )
+    def lcs_recursive(s1, s2):
+        if (s1, s2) in memo:
+            return memo[(s1, s2)]
 
+        if not s1 or not s2:
+            return ""
+
+        elif s1[0] == s2[0]:
+            result = s1[0] + lcs_recursive(s1[1:], s2[1:])
+        else:
+            result = max(lcs_recursive(s1, s2[1:]), lcs_recursive(s1[1:], s2), key=len)
+        memo[(s1, s2)] = result
+        return result
+
+    return lcs_recursive(a, b)
 
 
 """
