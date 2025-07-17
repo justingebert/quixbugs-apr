@@ -1,7 +1,9 @@
 def next_palindrome(digit_list):
-    high_mid = len(digit_list) // 2
-    low_mid = (len(digit_list) - 1) // 2
-    while high_mid < len(digit_list) and low_mid >= 0:
+    length = len(digit_list)
+    high_mid = length // 2
+    low_mid = (length - 1) // 2
+
+    while high_mid < length and low_mid >= 0:
         if digit_list[high_mid] == 9:
             digit_list[high_mid] = 0
             digit_list[low_mid] = 0
@@ -10,9 +12,12 @@ def next_palindrome(digit_list):
         else:
             digit_list[high_mid] += 1
             if low_mid != high_mid:
-                digit_list[low_mid] += 1
+                digit_list[low_mid] = digit_list[high_mid]
             return digit_list
-    return [1] + (len(digit_list)) * [0] + [1]
+
+    # All digits were 9, so next palindrome has length + 1, e.g. 999 -> 1001
+    return [1] + (length - 1) * [0] + [1]
+
 
 """
 Finds the next palindromic integer when given the current integer
