@@ -1,11 +1,10 @@
-
 def rpn_eval(tokens):
     def op(symbol, a, b):
         return {
-            '+': lambda a, b: a + b,
-            '-': lambda a, b: a - b,
-            '*': lambda a, b: a * b,
-            '/': lambda a, b: a / b
+            "+": lambda a, b: a + b,
+            "-": lambda a, b: a - b,
+            "*": lambda a, b: a * b,
+            "/": lambda a, b: a / b,
         }[symbol](a, b)
 
     stack = []
@@ -14,14 +13,14 @@ def rpn_eval(tokens):
         if isinstance(token, float):
             stack.append(token)
         else:
-            a = stack.pop()
-            b = stack.pop()
-            stack.append(
-                op(token, a, b)
-            )
+            # When an operator is encountered, the top two elements are popped.
+            # The first pop (a) is the second operand, and the second pop (b) is the first operand.
+            # For operations like subtraction and division, the order matters: b OPERATOR a
+            operand2 = stack.pop()
+            operand1 = stack.pop()
+            stack.append(op(token, operand1, operand2))
 
     return stack.pop()
-
 
 
 """
