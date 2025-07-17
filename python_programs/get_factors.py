@@ -1,13 +1,15 @@
-
 def get_factors(n):
     if n == 1:
         return []
 
-    for i in range(2, int(n ** 0.5) + 1):
+    for i in range(2, int(n**0.5) + 1):
         if n % i == 0:
+            # Found a factor, add it and recursively find factors of the quotient
             return [i] + get_factors(n // i)
 
-    return []
+    # If no factor was found up to sqrt(n), n itself must be a prime number
+    # (since we already handled n=1, and if n was composite, a factor would have been found)
+    return [n]
 
 
 """
