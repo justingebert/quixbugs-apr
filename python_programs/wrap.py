@@ -1,13 +1,44 @@
 def wrap(text, cols):
     lines = []
-    while len(text) > cols:
-        end = text.rfind(' ', 0, cols + 1)
-        if end == -1:
-            end = cols
-        line, text = text[:end], text[end:]
+    # Loop as long as there is text remaining to be wrapped
+    while text:
+        # Case 1: The remaining text is short enough to fit on one line.
+        # This is typically the last segment of the text.
+        if len(text) <= cols:
+            lines.append(text)
+            text = ""  # Mark text as fully consumed
+            break  # Exit the loop
+
+        # Case 2: The remaining text is longer than 'cols'. We need to break it.
+
+        # Find the last space within the first (cols + 1) characters of the current text.
+        # The search range '0, cols + 1' means indices from 0 up to 'cols' (inclusive of text[cols]).
+        # This allows breaking *at* text[cols] if it happens to be a space.
+        split_point = text.rfind(" ", 0, cols + 1)
+
+        # Determine the line based on the 'split_point':
+        # If 'split_point' is -1 (no space found in the segment)
+        # OR if 'split_point' is 0 (meaning the text starts with a space, and the word
+        # following it is too long to fit after that space within the 'cols' limit,
+        # or there are no other spaces before 'cols' to break on).
+        # In these scenarios, we must break the "word" (or block of non-spaces/initial spaces) at 'cols'.
+        if split_point <= 0:
+            line = text[:cols]
+            text = text[cols:]
+        else:
+            # A space was found at 'split_point' (where 'split_point' is greater than 0).
+            # The line should end *before* this space.
+            line = text[:split_point]
+            # The remaining text starts from this space. This is crucial for
+            # preserving the exact amount of spaces as required by the problem,
+            # as leading spaces for the next line are explicitly carried over.
+            text = text[split_point:]
+
+        # Add the determined line to the list of wrapped lines
         lines.append(line)
 
     return lines
+
 
 """
 Wrap Text
