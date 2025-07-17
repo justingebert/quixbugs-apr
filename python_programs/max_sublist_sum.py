@@ -1,12 +1,17 @@
-
 def max_sublist_sum(arr):
-    max_ending_here = 0
-    max_so_far = 0
+    if not arr:
+        return 0
 
-    for x in arr:
-        max_ending_here = max_ending_here + x
+    max_ending_here = arr[0]
+    max_so_far = arr[0]
+
+    for x in arr[1:]:
+        max_ending_here = max(x, max_ending_here + x)
         max_so_far = max(max_so_far, max_ending_here)
 
+    # If max_so_far is negative, return 0 (meaning empty sublist is considered)
+    if max_so_far < 0:
+        return 0
     return max_so_far
 
 
@@ -17,7 +22,6 @@ max-sublist-sum
 Efficient equivalent to max(sum(arr[i:j]) for 0 <= i <= j <= len(arr))
 
 Algorithm source: WordAligned.org by Thomas Guest
-
 
 Input:
     arr: A list of ints
