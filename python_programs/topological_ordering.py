@@ -1,12 +1,22 @@
 def topological_ordering(nodes):
     ordered_nodes = [node for node in nodes if not node.incoming_nodes]
+    added = set(ordered_nodes)
 
-    for node in ordered_nodes:
+    # Use an index to simulate a queue for processing nodes in order
+    idx = 0
+    while idx < len(ordered_nodes):
+        node = ordered_nodes[idx]
+        idx += 1
+
         for nextnode in node.outgoing_nodes:
-            if set(ordered_nodes).issuperset(nextnode.outgoing_nodes) and nextnode not in ordered_nodes:
-                ordered_nodes.append(nextnode)
+            # Check if all incoming nodes of nextnode are in ordered_nodes
+            if all(in_node in added for in_node in nextnode.incoming_nodes):
+                if nextnode not in added:
+                    ordered_nodes.append(nextnode)
+                    added.add(nextnode)
 
     return ordered_nodes
+
 
 """
 Topological Sort
