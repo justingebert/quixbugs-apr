@@ -4,15 +4,13 @@ def flatten(arr):
             for y in flatten(x):
                 yield y
         else:
-            yield flatten(x)
-
+            yield x
 
 
 """
 Flatten
 
 Flattens a nested list data structure into a single list.
-
 
 Input:
     arr: A list
