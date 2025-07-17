@@ -1,16 +1,25 @@
-
 def shortest_paths(source, weight_by_edge):
-    weight_by_node = {
-        v: float('inf') for u, v in weight_by_edge
-    }
+    weight_by_node = {node: float("inf") for edge in weight_by_edge for node in edge}
     weight_by_node[source] = 0
 
-    for i in range(len(weight_by_node) - 1):
+    # Relax edges repeatedly
+    for _ in range(len(weight_by_node) - 1):
         for (u, v), weight in weight_by_edge.items():
-            weight_by_edge[u, v] = min(
-                weight_by_node[u] + weight,
-                weight_by_node[v]
-            )
+            if (
+                weight_by_node[u] != float("inf")
+                and weight_by_node[u] + weight < weight_by_node[v]
+            ):
+                weight_by_node[v] = weight_by_node[u] + weight
+
+    # Check for negative-weight cycles
+    for (u, v), weight in weight_by_edge.items():
+        if (
+            weight_by_node[u] != float("inf")
+            and weight_by_node[u] + weight < weight_by_node[v]
+        ):
+            # In a real-world scenario, you might want to raise an exception or
+            # handle this case more explicitly. For this problem, we assume no negative cycles.
+            pass
 
     return weight_by_node
 
