@@ -8,5 +8,5 @@ main_branch: "main"
 max_issues: 40
 max_attempts: 3
 provider: "openai"
-model: "o4-mini"
+model: "gpt-4.1"
 sleep_after_issue: 0
