@@ -2,7 +2,8 @@ def detect_cycle(node):
     hare = tortoise = node
 
     while True:
-        if hare.successor is None:
+        # Check if hare or hare.successor is None to prevent AttributeError
+        if hare is None or hare.successor is None:
             return False
 
         tortoise = tortoise.successor
@@ -10,7 +11,6 @@ def detect_cycle(node):
 
         if hare is tortoise:
             return True
-
 
 
 """
