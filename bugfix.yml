@@ -6,7 +6,7 @@ test_cmd: "pytest"
 branch_prefix: "bugfix_v01_"
 main_branch: "main"
 max_issues: 40
-max_attempts: 3
+max_attempts: 1
 provider: "anthropic"
-model: "claude-3-5-haiku-latest"
+model: "claude-3-7-sonnet-latest"
 sleep_after_issue: 0
