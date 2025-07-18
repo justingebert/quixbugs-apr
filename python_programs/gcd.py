@@ -1,8 +1,9 @@
 def gcd(a, b):
+    # Euclidean algorithm: gcd(a, b) = gcd(b, a % b)
     if b == 0:
         return a
     else:
-        return gcd(a % b, b)
+        return gcd(b, a % b)
 
 
 """
