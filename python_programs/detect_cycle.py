@@ -1,8 +1,12 @@
 def detect_cycle(node):
+    # Check if the list is empty or has only one node
+    if node is None or node.successor is None:
+        return False
+
     hare = tortoise = node
 
     while True:
-        if hare.successor is None:
+        if hare is None or hare.successor is None:
             return False
 
         tortoise = tortoise.successor
@@ -10,7 +14,6 @@ def detect_cycle(node):
 
         if hare is tortoise:
             return True
-
 
 
 """
