@@ -3,10 +3,16 @@ def topological_ordering(nodes):
 
     for node in ordered_nodes:
         for nextnode in node.outgoing_nodes:
-            if set(ordered_nodes).issuperset(nextnode.outgoing_nodes) and nextnode not in ordered_nodes:
+            # Check if all incoming nodes of nextnode are already in ordered_nodes
+            # before adding nextnode to ordered_nodes
+            if (
+                all(incoming in ordered_nodes for incoming in nextnode.incoming_nodes)
+                and nextnode not in ordered_nodes
+            ):
                 ordered_nodes.append(nextnode)
 
     return ordered_nodes
+
 
 """
 Topological Sort
