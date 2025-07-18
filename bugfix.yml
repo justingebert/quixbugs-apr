@@ -8,5 +8,5 @@ main_branch: "main"
 max_issues: 40
 max_attempts: 1
 provider: "anthropic"
-model: "claude-3-7-sonnet-latest"
+model: "claude-sonnet-4-0"
 sleep_after_issue: 0
