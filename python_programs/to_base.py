@@ -1,14 +1,19 @@
-
 import string
+
+
 def to_base(num, b):
-    result = ''
+    result = ""
     alphabet = string.digits + string.ascii_uppercase
+
+    # Handle special case of num = 0
+    if num == 0:
+        return "0"
+
     while num > 0:
         i = num % b
         num = num // b
-        result = result + alphabet[i]
+        result = alphabet[i] + result
     return result
-
 
 
 """
