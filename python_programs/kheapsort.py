@@ -1,11 +1,13 @@
 def kheapsort(arr, k):
     import heapq
 
-    heap = arr[:k]
+    heap = arr[: min(k + 1, len(arr))]
     heapq.heapify(heap)
 
-    for x in arr:
-        yield heapq.heappushpop(heap, x)
+    result_index = 0
+    for i in range(k + 1, len(arr)):
+        yield heapq.heappushpop(heap, arr[i])
+        result_index += 1
 
     while heap:
         yield heapq.heappop(heap)
