@@ -7,6 +7,6 @@ branch_prefix: "bugfix_v01_"
 main_branch: "main"
 max_issues: 40
 max_attempts: 3
-provider: "anthropic"
-model: "claude-sonnet-4-0"
+provider: "openai"
+model: "o4-mini"
 sleep_after_issue: 0
