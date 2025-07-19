@@ -1,12 +1,21 @@
 def topological_ordering(nodes):
     ordered_nodes = [node for node in nodes if not node.incoming_nodes]
+    ordered_nodes_set = set(ordered_nodes)
 
-    for node in ordered_nodes:
+    i = 0
+    while i < len(ordered_nodes):
+        node = ordered_nodes[i]
         for nextnode in node.outgoing_nodes:
-            if set(ordered_nodes).issuperset(nextnode.outgoing_nodes) and nextnode not in ordered_nodes:
+            # Convert incoming_nodes list to set to use issubset
+            if nextnode not in ordered_nodes_set and set(
+                nextnode.incoming_nodes
+            ).issubset(ordered_nodes_set):
                 ordered_nodes.append(nextnode)
+                ordered_nodes_set.add(nextnode)
+        i += 1
 
     return ordered_nodes
+
 
 """
 Topological Sort
