@@ -9,10 +9,12 @@ def kth(arr, k):
     if k < num_less:
         return kth(below, k)
     elif k >= num_lessoreq:
-        return kth(above, k)
+        # Adjust k relative to the "above" sublist
+        # Since above contains elements greater than pivot, and those elements correspond to indices >= num_lessoreq in arr
+        # So to find the (k - num_lessoreq)th smallest in above, call kth(above, k - num_lessoreq)
+        return kth(above, k - num_lessoreq)
     else:
         return pivot
-
 
 
 """
