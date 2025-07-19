@@ -1,4 +1,3 @@
-
 def lis(arr):
     ends = {}
     longest = 0
@@ -9,12 +8,19 @@ def lis(arr):
 
         length = max(prefix_lengths) if prefix_lengths else 0
 
-        if length == longest or val < arr[ends[length + 1]]:
+        # Fix conditions to correctly update ends and longest
+        # When length == longest, we should always add a new longer subsequence
+        # When val < arr[ends[length + 1]], update ends[length + 1] to a smaller value index
+        if length == longest:
             ends[length + 1] = i
             longest = length + 1
+        elif (length + 1) in ends:
+            if val < arr[ends[length + 1]]:
+                ends[length + 1] = i
+        else:
+            ends[length + 1] = i
 
     return longest
-
 
 
 """
