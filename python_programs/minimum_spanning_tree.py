@@ -1,19 +1,24 @@
-
 def minimum_spanning_tree(weight_by_edge):
     group_by_node = {}
     mst_edges = set()
 
     for edge in sorted(weight_by_edge, key=weight_by_edge.__getitem__):
         u, v = edge
-        if group_by_node.setdefault(u, {u}) != group_by_node.setdefault(v, {v}):
+        group_u = group_by_node.setdefault(u, {u})
+        group_v = group_by_node.setdefault(v, {v})
+
+        if group_u is not group_v:
             mst_edges.add(edge)
-            group_by_node[u].update(group_by_node[v])
-            for node in group_by_node[v]:
-                group_by_node[node].update(group_by_node[u])
+
+            # Merge the smaller group into the larger one for efficiency.
+            if len(group_u) < len(group_v):
+                group_u, group_v = group_v, group_u
+
+            group_u.update(group_v)
+            for node in group_v:
+                group_by_node[node] = group_u
 
     return mst_edges
-
-
 
 
 """
@@ -32,11 +37,12 @@ Output:
     A set of edges that connects all the vertices of the input graph and has the least possible total weight.
 
 Example:
-    >>> minimum_spanning_tree({
+    >>> mst = minimum_spanning_tree({
     ...     (1, 2): 10,
     ...     (2, 3): 15,
     ...     (3, 4): 10,
     ...     (1, 4): 10
     ... })
-    {(1, 2), (3, 4), (1, 4)}
+    >>> sorted(list(mst))
+    [(1, 2), (1, 4), (3, 4)]
 """
