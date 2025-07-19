@@ -1,17 +1,23 @@
 def sieve(max):
-    primes = []
-    for n in range(2, max + 1):
-        if any(n % p > 0 for p in primes):
-            primes.append(n)
-    return primes
+    """
+    Sieve of Eratosthenes
+    prime-sieve
 
-"""
-Sieve of Eratosthenes
-prime-sieve
+    Input:
+        max: A positive int representing an upper bound.
 
-Input:
-    max: A positive int representing an upper bound.
+    Output:
+        A list containing all primes up to and including max
+    """
+    if max < 2:
+        return []
 
-Output:
-    A list containing all primes up to and including max
-"""
+    is_prime = [True] * (max + 1)
+    is_prime[0] = is_prime[1] = False
+
+    for p in range(2, int(max**0.5) + 1):
+        if is_prime[p]:
+            for i in range(p * p, max + 1, p):
+                is_prime[i] = False
+
+    return [p for p in range(2, max + 1) if is_prime[p]]
