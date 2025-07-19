@@ -1,20 +1,21 @@
-
 def lis(arr):
     ends = {}
     longest = 0
 
     for i, val in enumerate(arr):
 
-        prefix_lengths = [j for j in range(1, longest + 1) if arr[ends[j]] < val]
+        prefix_lengths = [j for j in ends if j <= longest and arr[ends[j]] < val]
 
-        length = max(prefix_lengths) if prefix_lengths else 0
+        length = max(prefix_lengths, default=0)
 
-        if length == longest or val < arr[ends[length + 1]]:
+        if length == longest or (length > 0 and val < arr[ends.get(length + 1, i)]):
             ends[length + 1] = i
-            longest = length + 1
+            longest = max(longest, length + 1)
+        elif length == 0 and (longest == 0 or val < arr[ends.get(1, i)]):
+            ends[1] = i
+            longest = max(longest, 1)
 
     return longest
-
 
 
 """
