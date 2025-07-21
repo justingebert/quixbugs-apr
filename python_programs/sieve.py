@@ -1,9 +1,15 @@
 def sieve(max):
-    primes = []
-    for n in range(2, max + 1):
-        if any(n % p > 0 for p in primes):
-            primes.append(n)
-    return primes
+    if max < 2:
+        return []
+    sieve = [True] * (max + 1)
+    sieve[0] = False
+    sieve[1] = False
+    for num in range(2, int(max**0.5) + 1):
+        if sieve[num]:
+            for multiple in range(num * num, max + 1, num):
+                sieve[multiple] = False
+    return [num for num in range(2, max + 1) if sieve[num]]
+
 
 """
 Sieve of Eratosthenes
