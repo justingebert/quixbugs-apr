@@ -1,17 +1,21 @@
 from collections import defaultdict
 
+
 def shortest_path_lengths(n, length_by_edge):
-    length_by_path = defaultdict(lambda: float('inf'))
-    length_by_path.update({(i, i): 0 for i in range(n)})
+    length_by_path = defaultdict(lambda: float("inf"))
+    # Initialize the diagonal to zero
+    for i in range(n):
+        length_by_path[i, i] = 0
+    # Update with the given edges
     length_by_path.update(length_by_edge)
 
     for k in range(n):
         for i in range(n):
             for j in range(n):
-                length_by_path[i, j] = min(
-                    length_by_path[i, j],
-                    length_by_path[i, k] + length_by_path[j, k]
-                )
+                # Correct the nested loop to update shortest paths
+                new_distance = length_by_path[i, k] + length_by_path[k, j]
+                if new_distance < length_by_path[i, j]:
+                    length_by_path[i, j] = new_distance
 
     return length_by_path
 
