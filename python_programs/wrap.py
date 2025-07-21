@@ -1,13 +1,22 @@
 def wrap(text, cols):
     lines = []
     while len(text) > cols:
-        end = text.rfind(' ', 0, cols + 1)
+        end = text.rfind(" ", 0, cols + 1)
         if end == -1:
-            end = cols
-        line, text = text[:end], text[end:]
+            # No space found, we have to split at cols
+            line, text = text[:cols], text[cols:]
+        else:
+            line, text = text[:end], text[end:]
         lines.append(line)
 
+        # Remove the leading spaces from the remaining text to preserve spaces correctly on next iteration
+        # According to the problem, spaces at start/end of lines shouldn't be trimmed.
+        # So this step is skipped to preserve spaces exactly as per the original text.
+
+    # Append the remaining text as last line (it can be shorter than cols)
+    lines.append(text)
     return lines
+
 
 """
 Wrap Text
