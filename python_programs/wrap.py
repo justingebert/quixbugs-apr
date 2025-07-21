@@ -1,13 +1,22 @@
 def wrap(text, cols):
     lines = []
     while len(text) > cols:
-        end = text.rfind(' ', 0, cols + 1)
+        # Find the last space within the column width
+        end = text.rfind(" ", 0, cols + 1)
         if end == -1:
+            # No space found, force break at cols
             end = cols
-        line, text = text[:end], text[end:]
+            line, text = text[:end], text[end:]
+        else:
+            # Break at the space and keep spaces at the start of next line
+            # The space is included at the start of the next line to preserve spaces exactly
+            line, text = text[:end], text[end:]
         lines.append(line)
-
+    # Append last line which may or may not be empty
+    if text:
+        lines.append(text)
     return lines
+
 
 """
 Wrap Text
