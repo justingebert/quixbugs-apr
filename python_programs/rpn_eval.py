@@ -1,27 +1,23 @@
-
 def rpn_eval(tokens):
     def op(symbol, a, b):
         return {
-            '+': lambda a, b: a + b,
-            '-': lambda a, b: a - b,
-            '*': lambda a, b: a * b,
-            '/': lambda a, b: a / b
+            "+": lambda a, b: a + b,
+            "-": lambda a, b: a - b,
+            "*": lambda a, b: a * b,
+            "/": lambda a, b: a / b,
         }[symbol](a, b)
 
     stack = []
 
     for token in tokens:
-        if isinstance(token, float):
-            stack.append(token)
+        if isinstance(token, (int, float)):  # Allow integers as well
+            stack.append(float(token))  # Ensure all numbers are floats
         else:
             a = stack.pop()
             b = stack.pop()
-            stack.append(
-                op(token, a, b)
-            )
+            stack.append(op(token, b, a))  # Correct order for subtraction and division
 
     return stack.pop()
-
 
 
 """
