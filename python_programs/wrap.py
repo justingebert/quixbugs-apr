@@ -1,13 +1,18 @@
 def wrap(text, cols):
     lines = []
     while len(text) > cols:
-        end = text.rfind(' ', 0, cols + 1)
+        end = text.rfind(" ", 0, cols + 1)
         if end == -1:
-            end = cols
-        line, text = text[:end], text[end:]
+            # If there are no spaces, split at cols
+            line, text = text[:cols], text[cols:]
+        else:
+            # Split at the last space, but preserve the space (so spaces at line ends preserved)
+            line, text = text[:end], text[end:]
         lines.append(line)
-
+    if text or not lines:
+        lines.append(text)
     return lines
+
 
 """
 Wrap Text
