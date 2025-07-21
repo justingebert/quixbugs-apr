@@ -9,10 +9,12 @@ def kth(arr, k):
     if k < num_less:
         return kth(below, k)
     elif k >= num_lessoreq:
-        return kth(above, k)
+        # If the k-th element is in the 'above' partition,
+        # its index relative to the 'above' partition needs to be adjusted.
+        # It's k minus the count of elements that are less than or equal to the pivot.
+        return kth(above, k - num_lessoreq)
     else:
         return pivot
-
 
 
 """
