@@ -1,19 +1,32 @@
-
 def minimum_spanning_tree(weight_by_edge):
     group_by_node = {}
     mst_edges = set()
 
+    # Helper function to find the representative group of a node
+    def find(node):
+        # Path compression is not strictly required but useful
+        while group_by_node[node] != node:
+            group_by_node[node] = group_by_node[group_by_node[node]]
+            node = group_by_node[node]
+        return node
+
+    # Initialize each node to be its own group
+    for edge in weight_by_edge:
+        u, v = edge
+        for node in (u, v):
+            if node not in group_by_node:
+                group_by_node[node] = node
+
     for edge in sorted(weight_by_edge, key=weight_by_edge.__getitem__):
         u, v = edge
-        if group_by_node.setdefault(u, {u}) != group_by_node.setdefault(v, {v}):
+        group_u = find(u)
+        group_v = find(v)
+        if group_u != group_v:
             mst_edges.add(edge)
-            group_by_node[u].update(group_by_node[v])
-            for node in group_by_node[v]:
-                group_by_node[node].update(group_by_node[u])
+            # Union
+            group_by_node[group_u] = group_v
 
     return mst_edges
-
-
 
 
 """
