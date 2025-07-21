@@ -1,12 +1,18 @@
 def kheapsort(arr, k):
     import heapq
 
+    # Initialize the heap with the first k elements
     heap = arr[:k]
     heapq.heapify(heap)
 
-    for x in arr:
-        yield heapq.heappushpop(heap, x)
+    # Iterate through the remaining elements of the array
+    # For each element, push it onto the heap and pop the smallest element
+    # This maintains a heap of size k with the smallest k elements seen so far
+    for i in range(k, len(arr)):
+        yield heapq.heappushpop(heap, arr[i])
 
+    # After processing all elements, the heap contains the remaining k elements
+    # Pop them one by one to get the sorted output
     while heap:
         yield heapq.heappop(heap)
 
