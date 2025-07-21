@@ -1,19 +1,4 @@
-def kheapsort(arr, k):
-    import heapq
-
-    heap = arr[:k]
-    heapq.heapify(heap)
-
-    for x in arr:
-        yield heapq.heappushpop(heap, x)
-
-    while heap:
-        yield heapq.heappop(heap)
-
-
-"""
-K-Heapsort
-k-heapsort
+"""K-Heapsort
 
 Sorts an almost-sorted array, wherein every element is no more than k units from its sorted position, in O(n log k) time.
 
@@ -36,3 +21,27 @@ Example:
     >>> list(kheapsort([1, 2, 3, 4, 5], 0))
     [1, 2, 3, 4, 5]
 """
+
+import heapq
+
+
+def kheapsort(arr, k):
+    n = len(arr)
+    # If k is zero or negative, the array is already sorted
+    if k <= 0:
+        for x in arr:
+            yield x
+        return
+
+    # Build a min-heap of the first k+1 elements (or all if n <= k)
+    size = min(k + 1, n)
+    heap = arr[:size]
+    heapq.heapify(heap)
+
+    # For each remaining element, push it into heap and pop the smallest
+    for x in arr[size:]:
+        yield heapq.heappushpop(heap, x)
+
+    # Extract and yield the remaining elements
+    while heap:
+        yield heapq.heappop(heap)
