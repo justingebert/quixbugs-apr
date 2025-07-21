@@ -1,18 +1,19 @@
 def find_first_in_sorted(arr, x):
     lo = 0
-    hi = len(arr)
+    hi = len(arr) - 1  # hi should be index of last element
 
     while lo <= hi:
         mid = (lo + hi) // 2
 
-        if x == arr[mid] and (mid == 0 or x != arr[mid - 1]):
-            return mid
-
-        elif x <= arr[mid]:
-            hi = mid
-
-        else:
+        if arr[mid] == x:
+            if mid == 0 or arr[mid - 1] != x:
+                return mid
+            else:
+                hi = mid - 1  # Continue search in left half
+        elif arr[mid] < x:
             lo = mid + 1
+        else:
+            hi = mid - 1
 
     return -1
 
