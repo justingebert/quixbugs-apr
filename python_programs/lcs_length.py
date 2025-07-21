@@ -1,19 +1,4 @@
-def lcs_length(s, t):
-    from collections import Counter
-
-    dp = Counter()
-
-    for i in range(len(s)):
-        for j in range(len(t)):
-            if s[i] == t[j]:
-                dp[i, j] = dp[i - 1, j] + 1
-
-    return max(dp.values()) if dp else 0
-
-
-
-"""
-Longest Common Substring
+"""Longest Common Substring
 longest-common-substring
 
 Input:
@@ -29,3 +14,20 @@ Example:
     >>> lcs_length('meow', 'homeowner')
     4
 """
+
+
+def lcs_length(s, t):
+    # dp[(i, j)] will hold the length of the longest common suffix
+    # ending at s[i] and t[j]
+    dp = {}
+    maxlen = 0
+    for i in range(len(s)):
+        for j in range(len(t)):
+            if s[i] == t[j]:
+                if i == 0 or j == 0:
+                    dp[(i, j)] = 1
+                else:
+                    dp[(i, j)] = dp.get((i - 1, j - 1), 0) + 1
+                if dp[(i, j)] > maxlen:
+                    maxlen = dp[(i, j)]
+    return maxlen
