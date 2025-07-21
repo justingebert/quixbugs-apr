@@ -1,15 +1,7 @@
-
-def sqrt(x, epsilon):
-    approx = x / 2
-    while abs(x - approx) > epsilon:
-        approx = 0.5 * (approx + x / approx)
-    return approx
-
 """
 Square Root
 
 Newton-Raphson method implementation.
-
 
 Input:
     x: A float
@@ -25,3 +17,11 @@ Example:
     >>> sqrt(2, 0.01)
     1.4166666666666665
 """
+
+
+def sqrt(x, epsilon):
+    approx = x / 2
+    # Continue improving approximation until its square is within epsilon of x
+    while abs(approx * approx - x) > epsilon:
+        approx = 0.5 * (approx + x / approx)
+    return approx
