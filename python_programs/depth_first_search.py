@@ -7,12 +7,13 @@ def depth_first_search(startnode, goalnode):
         elif node is goalnode:
             return True
         else:
-            return any(
-                search_from(nextnode) for nextnode in node.successors
-            )
+            nodesvisited.add(node)
+            try:
+                return any(search_from(nextnode) for nextnode in node.successors)
+            except AttributeError:
+                return False
 
     return search_from(startnode)
-
 
 
 """
