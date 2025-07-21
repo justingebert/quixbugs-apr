@@ -1,13 +1,14 @@
-
 def get_factors(n):
     if n == 1:
         return []
 
-    for i in range(2, int(n ** 0.5) + 1):
+    for i in range(2, int(n**0.5) + 1):
         if n % i == 0:
             return [i] + get_factors(n // i)
 
-    return []
+    # If no divisor is found in the loop, it means n is a prime number itself.
+    # Since n > 1 (checked by the first if condition), n is a prime factor.
+    return [n]
 
 
 """
