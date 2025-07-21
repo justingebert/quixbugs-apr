@@ -1,19 +1,52 @@
-
 def minimum_spanning_tree(weight_by_edge):
-    group_by_node = {}
+    group_by_node = {}  # Maps node to its representative set (the set object itself)
     mst_edges = set()
 
-    for edge in sorted(weight_by_edge, key=weight_by_edge.__getitem__):
+    # Sort edges by weight in ascending order
+    sorted_edges = sorted(weight_by_edge, key=weight_by_edge.__getitem__)
+
+    for edge in sorted_edges:
         u, v = edge
-        if group_by_node.setdefault(u, {u}) != group_by_node.setdefault(v, {v}):
+
+        # Get the component set for u. If u is new, create a new set {u}.
+        # get_u_group is the actual set object that u belongs to.
+        # This acts as the 'find' operation in a Disjoint Set Union (DSU) structure.
+        get_u_group = group_by_node.setdefault(u, {u})
+
+        # Get the component set for v.
+        get_v_group = group_by_node.setdefault(v, {v})
+
+        # Check if u and v are already in the same component.
+        # This is correctly checked by comparing if they point to the *same set object*.
+        if get_u_group is not get_v_group:
+            # They are in different components, so add the edge to MST
             mst_edges.add(edge)
-            group_by_node[u].update(group_by_node[v])
-            for node in group_by_node[v]:
-                group_by_node[node].update(group_by_node[u])
+
+            # Merge the two components.
+            # To optimize, merge the smaller set into the larger one (union by size/rank).
+            # The 'target_group' will be the representative set for the merged component.
+            if len(get_u_group) >= len(get_v_group):
+                target_group = get_u_group
+                source_group = get_v_group
+            else:
+                target_group = get_v_group
+                source_group = get_u_group
+
+            # To avoid issues with iterating over a set that is being modified (though
+            # source_group itself isn't directly modified by target_group.update(),
+            # this makes it robust), create a list of elements from source_group.
+            nodes_to_repoint = list(source_group)
+
+            # Perform the set merge: add all elements from source_group into target_group.
+            target_group.update(source_group)
+
+            # Update the group_by_node mappings for all nodes that were in the source_group
+            # to point to the new, merged target_group. This is crucial for correctness
+            # in a DSU implementation where the set object itself represents the component.
+            for node in nodes_to_repoint:
+                group_by_node[node] = target_group
 
     return mst_edges
-
-
 
 
 """
