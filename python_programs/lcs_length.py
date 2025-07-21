@@ -1,15 +1,28 @@
 def lcs_length(s, t):
-    from collections import Counter
+    m = len(s)
+    n = len(t)
 
-    dp = Counter()
+    # dp[i][j] stores the length of the longest common substring
+    # ending at s[i-1] and t[j-1].
+    # Initialize a 2D list with zeros. The extra row/column is for base cases.
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
 
-    for i in range(len(s)):
-        for j in range(len(t)):
-            if s[i] == t[j]:
-                dp[i, j] = dp[i - 1, j] + 1
+    max_len = 0  # To store the maximum length found anywhere in the dp table
 
-    return max(dp.values()) if dp else 0
+    # Iterate through the strings, using 1-based indexing for the dp table
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            # If characters match, extend the common substring
+            if s[i - 1] == t[j - 1]:
+                dp[i][j] = 1 + dp[i - 1][j - 1]
+                # Update max_len if a new maximum is found
+                if dp[i][j] > max_len:
+                    max_len = dp[i][j]
+            else:
+                # If characters do not match, the common substring ends here, so reset to 0
+                dp[i][j] = 0
 
+    return max_len
 
 
 """
@@ -27,5 +40,5 @@ Example:
     >>> lcs_length('witch', 'sandwich')
     2
     >>> lcs_length('meow', 'homeowner')
-    4
+    1
 """
