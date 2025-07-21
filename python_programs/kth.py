@@ -9,10 +9,10 @@ def kth(arr, k):
     if k < num_less:
         return kth(below, k)
     elif k >= num_lessoreq:
-        return kth(above, k)
+        # adjust k to skip all elements <= pivot
+        return kth(above, k - num_lessoreq)
     else:
         return pivot
-
 
 
 """
