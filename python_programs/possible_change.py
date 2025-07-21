@@ -1,19 +1,25 @@
 # Python 3
+
+
 def possible_change(coins, total):
+    # Base case: if total is 0, one valid way (no coins needed)
     if total == 0:
         return 1
-    if total < 0:
+    # If total is negative or no coins left, no valid way
+    if total < 0 or not coins:
         return 0
 
     first, *rest = coins
-    return possible_change(coins, total - first) + possible_change(rest, total)
-
+    # Count combinations including the first coin
+    with_first = possible_change(coins, total - first)
+    # Count combinations excluding the first coin
+    without_first = possible_change(rest, total)
+    return with_first + without_first
 
 
 """
 Making Change
 change
-
 
 Input:
     coins: A list of positive ints representing coin denominations
