@@ -1,13 +1,18 @@
-
 def max_sublist_sum(arr):
-    max_ending_here = 0
-    max_so_far = 0
+    if not arr:
+        return 0
 
-    for x in arr:
-        max_ending_here = max_ending_here + x
-        max_so_far = max(max_so_far, max_ending_here)
+    max_so_far = arr[0]
+    current_max = arr[0]
 
-    return max_so_far
+    for i in range(1, len(arr)):
+        x = arr[i]
+        current_max = max(x, current_max + x)
+        max_so_far = max(max_so_far, current_max)
+
+    # According to the docstring, an empty sublist sum (0) is a valid candidate.
+    # If all non-empty sublist sums are negative, 0 should be returned.
+    return max(0, max_so_far)
 
 
 """
