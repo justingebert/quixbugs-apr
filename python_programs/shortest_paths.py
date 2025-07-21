@@ -1,16 +1,29 @@
-
 def shortest_paths(source, weight_by_edge):
-    weight_by_node = {
-        v: float('inf') for u, v in weight_by_edge
-    }
+    # Collect all unique nodes from the graph
+    all_nodes = set()
+    for u, v in weight_by_edge:
+        all_nodes.add(u)
+        all_nodes.add(v)
+    all_nodes.add(source)  # Ensure the source node is also included, even if isolated
+
+    # Initialize weights for all nodes to infinity, except the source
+    weight_by_node = {node: float("inf") for node in all_nodes}
     weight_by_node[source] = 0
 
-    for i in range(len(weight_by_node) - 1):
+    # Get the number of vertices for the loop count (V-1 passes)
+    V = len(all_nodes)
+
+    # Relax edges V-1 times
+    for i in range(V - 1):
         for (u, v), weight in weight_by_edge.items():
-            weight_by_edge[u, v] = min(
-                weight_by_node[u] + weight,
-                weight_by_node[v]
-            )
+            # Bellman-Ford relaxation step:
+            # If the path through u is shorter than the current path to v, update v's weight.
+            # This is the corrected line. The original code incorrectly updated weight_by_edge.
+            if weight_by_node[u] + weight < weight_by_node[v]:
+                weight_by_node[v] = weight_by_node[u] + weight
+
+    # The problem states there are no negative-weight cycles,
+    # so a final check for negative cycles is not required by the precondition.
 
     return weight_by_node
 
