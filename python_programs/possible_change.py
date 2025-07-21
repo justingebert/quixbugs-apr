@@ -2,12 +2,14 @@
 def possible_change(coins, total):
     if total == 0:
         return 1
-    if total < 0:
+    if total < 0 or not coins:
         return 0
 
     first, *rest = coins
+    # The bug is in the recursive calls.
+    # The first call should use the same set of coins, but with a reduced total.
+    # The second call should use the remaining coins and the same total.
     return possible_change(coins, total - first) + possible_change(rest, total)
-
 
 
 """
