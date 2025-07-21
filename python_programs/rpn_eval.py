@@ -1,11 +1,10 @@
-
 def rpn_eval(tokens):
     def op(symbol, a, b):
         return {
-            '+': lambda a, b: a + b,
-            '-': lambda a, b: a - b,
-            '*': lambda a, b: a * b,
-            '/': lambda a, b: a / b
+            "+": lambda a, b: a + b,
+            "-": lambda a, b: a - b,
+            "*": lambda a, b: a * b,
+            "/": lambda a, b: a / b,
         }[symbol](a, b)
 
     stack = []
@@ -14,14 +13,14 @@ def rpn_eval(tokens):
         if isinstance(token, float):
             stack.append(token)
         else:
-            a = stack.pop()
-            b = stack.pop()
-            stack.append(
-                op(token, a, b)
-            )
+            # In RPN, the top element popped (a) is the right operand,
+            # and the second element popped (b) is the left operand.
+            # So the operation should be b OP a.
+            a = stack.pop()  # This is the right operand
+            b = stack.pop()  # This is the left operand
+            stack.append(op(token, b, a))
 
     return stack.pop()
-
 
 
 """
