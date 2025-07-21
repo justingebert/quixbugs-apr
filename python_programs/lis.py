@@ -1,4 +1,3 @@
-
 def lis(arr):
     ends = {}
     longest = 0
@@ -9,12 +8,14 @@ def lis(arr):
 
         length = max(prefix_lengths) if prefix_lengths else 0
 
-        if length == longest or val < arr[ends[length + 1]]:
+        # bug was here: if (length == longest or val < arr[ends[length + 1]]):
+        # When ends does not yet contain length+1, should always update.
+        if length == longest or (length + 1 not in ends) or val < arr[ends[length + 1]]:
             ends[length + 1] = i
-            longest = length + 1
+            if longest < length + 1:
+                longest = length + 1
 
     return longest
-
 
 
 """
