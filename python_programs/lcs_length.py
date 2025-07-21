@@ -1,15 +1,20 @@
 def lcs_length(s, t):
-    from collections import Counter
+    dp = {}
 
-    dp = Counter()
-
+    max_len = 0
     for i in range(len(s)):
         for j in range(len(t)):
             if s[i] == t[j]:
-                dp[i, j] = dp[i - 1, j] + 1
+                if i == 0 or j == 0:
+                    dp[i, j] = 1
+                else:
+                    dp[i, j] = dp.get((i - 1, j - 1), 0) + 1
+                if dp[i, j] > max_len:
+                    max_len = dp[i, j]
+            else:
+                dp[i, j] = 0
 
-    return max(dp.values()) if dp else 0
-
+    return max_len
 
 
 """
