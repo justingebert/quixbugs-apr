@@ -1,17 +1,23 @@
 def longest_common_subsequence(a, b):
-    if not a or not b:
-        return ''
+    memo = {}
 
-    elif a[0] == b[0]:
-        return a[0] + longest_common_subsequence(a[1:], b)
+    def _lcs(a, b):
+        if not a or not b:
+            return ""
 
-    else:
-        return max(
-            longest_common_subsequence(a, b[1:]),
-            longest_common_subsequence(a[1:], b),
-            key=len
-        )
+        if (a, b) in memo:
+            return memo[(a, b)]
 
+        elif a[0] == b[0]:
+            result = a[0] + _lcs(a[1:], b[1:])
+
+        else:
+            result = max(_lcs(a, b[1:]), _lcs(a[1:], b), key=len)
+
+        memo[(a, b)] = result
+        return result
+
+    return _lcs(a, b)
 
 
 """
