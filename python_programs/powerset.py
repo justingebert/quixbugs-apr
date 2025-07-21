@@ -1,11 +1,19 @@
-
 def powerset(arr):
-    if arr:
-        first, *rest = arr #python3 just like car and cdr (in this case anyway..)
-        rest_subsets = powerset(rest)
-        return [[first] + subset for subset in rest_subsets]
-    else:
+    if not arr:
         return [[]]
+    else:
+        first, *rest = arr
+        rest_subsets = powerset(rest)
+
+        # Subsets that do not contain 'first'
+        # These are just the subsets of the rest of the array
+
+        # Subsets that do contain 'first'
+        # These are formed by adding 'first' to each of the subsets of the rest of the array
+        subsets_with_first = [[first] + subset for subset in rest_subsets]
+
+        # The complete powerset is the union of these two sets of subsets
+        return rest_subsets + subsets_with_first
 
 
 """
