@@ -4,8 +4,11 @@ def kheapsort(arr, k):
     heap = arr[:k]
     heapq.heapify(heap)
 
-    for x in arr:
-        yield heapq.heappushpop(heap, x)
+    # The original code was missing the initial elements from the array
+    # that were not part of the initial heap. The loop should iterate over
+    # the remaining elements of the array.
+    for i in range(k, len(arr)):
+        yield heapq.heappushpop(heap, arr[i])
 
     while heap:
         yield heapq.heappop(heap)
