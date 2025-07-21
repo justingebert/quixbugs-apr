@@ -1,4 +1,3 @@
-
 def mergesort(arr):
     def merge(left, right):
         result = []
@@ -11,17 +10,19 @@ def mergesort(arr):
             else:
                 result.append(right[j])
                 j += 1
-        result.extend(left[i:] or right[j:])
+        # Bug was here: result.extend(left[i:] or right[j:])
+        # This would only extend one of the left or right if the first was non-empty. It should extend both slices independently.
+        result.extend(left[i:])
+        result.extend(right[j:])
         return result
 
-    if len(arr) == 0:
+    if len(arr) <= 1:  # also sort arrays of length 1 directly
         return arr
     else:
         middle = len(arr) // 2
         left = mergesort(arr[:middle])
         right = mergesort(arr[middle:])
         return merge(left, right)
-
 
 
 """
