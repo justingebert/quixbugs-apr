@@ -1,19 +1,38 @@
-
 def minimum_spanning_tree(weight_by_edge):
     group_by_node = {}
     mst_edges = set()
 
+    # Use a dict to represent group leaders (disjoint-set by leader)
+    leader = {}
+
+    def find(u):
+        # Path compression for efficiency
+        if leader[u] != u:
+            leader[u] = find(leader[u])
+        return leader[u]
+
+    def union(u, v):
+        leader_u = find(u)
+        leader_v = find(v)
+        if leader_u != leader_v:
+            leader[leader_v] = leader_u
+            return True
+        return False
+
+    # Set up leader to point to self for all nodes
+    for edge in weight_by_edge:
+        u, v = edge
+        if u not in leader:
+            leader[u] = u
+        if v not in leader:
+            leader[v] = v
+
     for edge in sorted(weight_by_edge, key=weight_by_edge.__getitem__):
         u, v = edge
-        if group_by_node.setdefault(u, {u}) != group_by_node.setdefault(v, {v}):
+        if union(u, v):
             mst_edges.add(edge)
-            group_by_node[u].update(group_by_node[v])
-            for node in group_by_node[v]:
-                group_by_node[node].update(group_by_node[u])
 
     return mst_edges
-
-
 
 
 """
