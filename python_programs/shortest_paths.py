@@ -1,16 +1,19 @@
-
 def shortest_paths(source, weight_by_edge):
-    weight_by_node = {
-        v: float('inf') for u, v in weight_by_edge
-    }
+    # Collect all nodes in the graph
+    nodes = set()
+    for u, v in weight_by_edge:
+        nodes.add(u)
+        nodes.add(v)
+
+    # Initialize distances to infinity, except source = 0
+    weight_by_node = {node: float("inf") for node in nodes}
     weight_by_node[source] = 0
 
-    for i in range(len(weight_by_node) - 1):
-        for (u, v), weight in weight_by_edge.items():
-            weight_by_edge[u, v] = min(
-                weight_by_node[u] + weight,
-                weight_by_node[v]
-            )
+    # Relax edges repeatedly (Bellman–Ford)
+    for _ in range(len(nodes) - 1):
+        for (u, v), w in weight_by_edge.items():
+            if weight_by_node[u] + w < weight_by_node[v]:
+                weight_by_node[v] = weight_by_node[u] + w
 
     return weight_by_node
 
