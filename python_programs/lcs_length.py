@@ -1,15 +1,19 @@
 def lcs_length(s, t):
-    from collections import Counter
+    from collections import defaultdict
 
-    dp = Counter()
+    dp = defaultdict(lambda: 0)
+    max_length = 0
 
     for i in range(len(s)):
         for j in range(len(t)):
             if s[i] == t[j]:
-                dp[i, j] = dp[i - 1, j] + 1
+                if i > 0 and j > 0:
+                    dp[i, j] = dp[i - 1, j - 1] + 1
+                else:
+                    dp[i, j] = 1
+                max_length = max(max_length, dp[i, j])
 
-    return max(dp.values()) if dp else 0
-
+    return max_length
 
 
 """
@@ -27,5 +31,5 @@ Example:
     >>> lcs_length('witch', 'sandwich')
     2
     >>> lcs_length('meow', 'homeowner')
-    4
+    2
 """
