@@ -1,9 +1,12 @@
-
 def sqrt(x, epsilon):
     approx = x / 2
-    while abs(x - approx) > epsilon:
+    while True:
+        prev_approx = approx
         approx = 0.5 * (approx + x / approx)
+        if abs(approx - prev_approx) <= epsilon:
+            break
     return approx
+
 
 """
 Square Root
