@@ -1,20 +1,21 @@
-
 def shunting_yard(tokens):
-    precedence = {
-        '+': 1,
-        '-': 1,
-        '*': 2,
-        '/': 2
-    }
+    precedence = {"+": 1, "-": 1, "*": 2, "/": 2}
 
     rpntokens = []
     opstack = []
     for token in tokens:
         if isinstance(token, int):
             rpntokens.append(token)
-        else:
-            while opstack and precedence[token] <= precedence[opstack[-1]]:
+        elif token in precedence:
+            while (
+                opstack
+                and opstack[-1] in precedence
+                and precedence[token] <= precedence[opstack[-1]]
+            ):
                 rpntokens.append(opstack.pop())
+            opstack.append(token)
+        else:
+            raise ValueError(f"Invalid token: {token}")
 
     while opstack:
         rpntokens.append(opstack.pop())
