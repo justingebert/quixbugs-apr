@@ -1,4 +1,3 @@
-
 def minimum_spanning_tree(weight_by_edge):
     group_by_node = {}
     mst_edges = set()
@@ -7,13 +6,13 @@ def minimum_spanning_tree(weight_by_edge):
         u, v = edge
         if group_by_node.setdefault(u, {u}) != group_by_node.setdefault(v, {v}):
             mst_edges.add(edge)
-            group_by_node[u].update(group_by_node[v])
-            for node in group_by_node[v]:
-                group_by_node[node].update(group_by_node[u])
+            # Merge the two components
+            merged_group = group_by_node[u].union(group_by_node[v])
+            # Update all nodes in both components to point to the merged set
+            for node in merged_group:
+                group_by_node[node] = merged_group
 
     return mst_edges
-
-
 
 
 """
