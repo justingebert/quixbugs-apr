@@ -1,16 +1,22 @@
-
 def shortest_paths(source, weight_by_edge):
-    weight_by_node = {
-        v: float('inf') for u, v in weight_by_edge
-    }
+    # Collect all nodes from the edges
+    nodes = set()
+    for u, v in weight_by_edge.keys():
+        nodes.add(u)
+        nodes.add(v)
+
+    # Initialize distances
+    weight_by_node = {node: float("inf") for node in nodes}
     weight_by_node[source] = 0
 
-    for i in range(len(weight_by_node) - 1):
+    # Relax edges repeatedly
+    for i in range(len(nodes) - 1):
         for (u, v), weight in weight_by_edge.items():
-            weight_by_edge[u, v] = min(
-                weight_by_node[u] + weight,
-                weight_by_node[v]
-            )
+            if (
+                weight_by_node[u] != float("inf")
+                and weight_by_node[u] + weight < weight_by_node[v]
+            ):
+                weight_by_node[v] = weight_by_node[u] + weight
 
     return weight_by_node
 
