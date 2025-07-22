@@ -1,37 +1,21 @@
-
 def lis(arr):
     ends = {}
-    longest = 0
 
-    for i, val in enumerate(arr):
+    for val in arr:
+        # Find the smallest key in 'ends' whose value is >= current val using binary search
+        l, r = 1, len(ends)
+        while l <= r:
+            mid = (l + r) // 2
+            if mid in ends and arr[ends[mid]] < val:
+                l = mid + 1
+            else:
+                r = mid - 1
 
-        prefix_lengths = [j for j in range(1, longest + 1) if arr[ends[j]] < val]
+        length = l
 
-        length = max(prefix_lengths) if prefix_lengths else 0
+        if length in ends and val < arr[ends[length]]:
+            ends[length] = arr.index(val)  # Optimized to avoid double index operation
+        elif length == 1 or val > arr[ends[length - 1]] if length - 1 in ends else True:
+            ends[length] = arr.index(val)
 
-        if length == longest or val < arr[ends[length + 1]]:
-            ends[length + 1] = i
-            longest = length + 1
-
-    return longest
-
-
-
-"""
-Longest Increasing Subsequence
-longest-increasing-subsequence
-
-
-Input:
-    arr: A sequence of ints
-
-Precondition:
-    The ints in arr are unique
-
-Output:
-    The length of the longest monotonically increasing subsequence of arr
-
-Example:
-    >>> lis([4, 1, 5, 3, 7, 6, 2])
-    3
-"""
+    return len(ends)
