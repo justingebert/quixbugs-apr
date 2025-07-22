@@ -1,12 +1,3 @@
-def reverse_linked_list(node):
-    prevnode = None
-    while node:
-        nextnode = node.successor
-        node.successor = prevnode
-        node = nextnode
-    return prevnode
-
-
 """
 Reverse Linked List
 
@@ -24,3 +15,13 @@ Side effect:
 Output:
     The head of the reversed linked list
 """
+
+
+def reverse_linked_list(node):
+    prevnode = None
+    while node:
+        nextnode = node.successor
+        node.successor = prevnode
+        prevnode = node
+        node = nextnode
+    return prevnode
