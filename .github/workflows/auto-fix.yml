@@ -4,7 +4,7 @@ on:
   # schedule:
   #   - cron: "30 3 * * *"
   issues:
-    types: [ opened, labeled ]
+    types: [ labeled ]
   issue_comment:
     types: [ created, edited ]
 

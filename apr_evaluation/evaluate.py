@@ -36,9 +36,19 @@ def calculate_metrics(run_path):
     successful_repairs = bugfix_results.get("successful_repairs", 0)
     repair_success_rate = (successful_repairs / num_issues) * 100 if num_issues > 0 else 0
 
+    # Get max_attempts from the first issue metrics file found
+    max_attempts = 0
+    issue_metrics_files = list(run_path.glob("issue_*_metrics.json"))
+    if issue_metrics_files:
+        with open(issue_metrics_files[0], 'r') as f:
+            issue_metrics_data = json.load(f)
+            max_attempts = issue_metrics_data.get("config", {}).get("max_attempts", 0)
+
+
     metrics = {
         "run_id": bugfix_results.get("github_run_id"),
         "model": bugfix_results.get("model", "unknown"),
+        "max_attempts": max_attempts,
         "total_issues": num_issues,
         "successful_repairs": successful_repairs,
         "repair_success_rate": repair_success_rate,
@@ -61,6 +71,7 @@ def print_metrics(metrics):
     print("\n===== Pipeline Run Metrics =====\n")
     print(f"Run ID: {metrics['run_id']}")
     print(f"Model: {metrics['model']}")
+    print(f"Max Attempts: {metrics['max_attempts']}")
     print(f"Total Issues: {metrics['total_issues']}")
     print(f"Successful Repairs: {metrics['successful_repairs']}")
     print(f"Repair Success Rate: {metrics['repair_success_rate']:.2f}%")
@@ -87,16 +98,48 @@ def save_metrics(metrics, path):
 
     print(f"\nMetrics saved to: {output_path}")
 
+def save_aggregated_metrics(metrics, output_path):
+    """Save aggregated metrics to a JSON file"""
+    output_path = Path(output_path)
+    if output_path.is_dir():
+        output_path = output_path / "aggregated_metrics.json"
+
+    with open(output_path, 'w') as f:
+        json.dump(metrics, f, indent=2)
+
+    print(f"\nAggregated metrics saved to: {output_path}")
+
 
 def main():
     parser = argparse.ArgumentParser(description="Evaluate metrics from a pipeline run")
     parser.add_argument("run_path", nargs="?", default=None, help="Path to the run folder (default: most recent run)")
     parser.add_argument("--save", "-s", action="store_true", help="Save metrics to a JSON file")
+    parser.add_argument("--all", "-a", action="store_true", help="aggergate all runs in the apr_evaluation directory")
 
     args = parser.parse_args()
 
+    # process all runs in the apr_evaluation directory
+    if args.all:
+        evaluation_dir = Path("apr_evaluation")
+        run_folders = [f for f in evaluation_dir.glob("run_*") if f.is_dir()]
+        if not run_folders:
+            print("Error: No run folders found in the apr_evaluation directory")
+            return 1
+
+        run_folders.sort()
+        all_metrics = []
+        for run_path in run_folders:
+            print(f"Processing run folder: {run_path}")
+            metrics = calculate_metrics(run_path)
+            if metrics:
+                print_metrics(metrics)
+                all_metrics.append(metrics)
+
+        if args.save:
+            save_aggregated_metrics(all_metrics, evaluation_dir)
+
     # If no run_path provided, find most recent run
-    if not args.run_path:
+    elif not args.run_path and not args.all:
         evaluation_dir = Path("apr_evaluation")
         run_folders = [f for f in evaluation_dir.glob("run_*") if f.is_dir()]
 
@@ -107,16 +150,23 @@ def main():
         run_folders.sort(reverse=True)
         run_path = run_folders[0]
         print(f"Using latest run folder: {run_path}")
+
+        metrics = calculate_metrics(run_path)
+
+        if metrics:
+            print_metrics(metrics)
+            if args.save:
+                save_metrics(metrics, run_path)
+    # If run_path is provided, calculate metrics for that specific run
     else:
         run_path = Path(args.run_path)
+        metrics = calculate_metrics(run_path)
 
-    metrics = calculate_metrics(run_path)
+        if metrics:
+            print_metrics(metrics)
+            if args.save:
+                save_metrics(metrics, run_path)
 
-    if metrics:
-        print_metrics(metrics)
-
-        if args.save:
-            save_metrics(metrics, run_path)
 
     return 0
 

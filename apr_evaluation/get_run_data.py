@@ -13,7 +13,7 @@ headers = None
 
 api_url = "https://api.github.com/repos/"
 
-def get_workflow_runs(workflow_name, run_limit=30):
+def get_workflow_runs(workflow_name, run_limit=7):
     """Get runs for a specific workflow by name or ID"""
     # with id
     workflow_id = workflow_name
@@ -159,7 +159,7 @@ def download_artifact(artifact, destination_folder):
         return [artifact_path]
 
 
-def get_run_data(workflow_name, run_limit=1):
+def get_run_data(workflow_name, run_limit=7):
     """get runs, metrics, and artifacts of a workflow"""
     all_runs = get_workflow_runs(workflow_name, run_limit)
     print(f"Found {len(all_runs)} total runs")
